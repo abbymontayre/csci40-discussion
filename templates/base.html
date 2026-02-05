@@ -1,0 +1,31 @@
+<!-- <!DOCTYPE html>
+    <head>
+       <title>Task List</title>
+    </head>
+
+    <body>
+        <h2>Hello World!</h2>
+        <ul>
+            {% for task in tasks %}
+            <li> {{task}}</li>
+            {% endfor %}
+        </ul>
+    </body>x
+</html> -->
+
+<!DOCTYPE html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <title>{% block title %}Our blogpage{% endblock %}</title>
+        {% block styles %} {% endblock %}
+    </head>
+
+    <body>
+        {% block header%} {%endblock%}
+        <div id="content">
+            {% block content %} {% endblock %}
+        </div>
+        {% block scripts %} {% endblock %}
+    </body>
+</html>
+
