@@ -1,0 +1,6 @@
+{% extends 'blogpage/base_blogpage.html' %}   
+{% block content %}
+    <h1>{{ task.taskgroup.name }}</h2>
+    <h2>{{ task.name }}</h2>
+    <p> Due on {{ task.due_date|date:"Y-m-d"}}</p>
+{% endblock %}blogpage/templates/blogpage/task_list.html

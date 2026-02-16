@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import TaskForm
+from django.views.generic.list import *
+from django.views.generic.detail import *
 from django.views.generic import FormView
 from .models import *
+
+tasks = []
 
 def index(request):
     return HttpResponse('Hello world! This came from the index view.')
@@ -24,6 +28,13 @@ def task_list(request):
              "tasks": tasks,
         })
 
+def task_detail(request, id):
+    task = Task.objects.get(pk=id)
+
+    return render(request, "blogpage/task_detail.html", {
+         "task": task,
+    }) 
+
 class TaskAddView(FormView):
     template_name = "blogpage/task_add.html"
     form_class = TaskForm
@@ -32,6 +43,15 @@ class TaskAddView(FormView):
     def form_valid(self, form):
         tasks.append( (form.cleaned_data['task_name'], form.cleaned_data['task_date']) )
         return super().form_valid(form)
+
+class TaskListView(ListView):
+    model = Task
+    template_name = 'blogpage/task_list.html'
+
+class TaskDetailView(DetailView):
+    model = Task
+    template_name = 'blogpage/task_detail.html'
+
 
 # def task_list(request, id):
 #     context = {}
