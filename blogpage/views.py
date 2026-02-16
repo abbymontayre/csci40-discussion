@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import TaskForm
 from django.views.generic import FormView
-
-tasks = []
+from .models import *
 
 def index(request):
     return HttpResponse('Hello world! This came from the index view.')
@@ -17,6 +16,8 @@ def task_list(request):
                 return redirect('/blogpage/list')
         else:
             form = TaskForm()
+
+        tasks = Task.objects.all()
 
         return render(request, "blogpage/task_list.html", {
              "form": form,
