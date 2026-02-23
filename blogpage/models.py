@@ -1,6 +1,12 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User
 from django.urls import *
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    year_level = models.IntegerField()
+    course = models.CharField(max_length=63)
 
 class TaskGroup(models.Model):
     name = models.CharField(max_length=50)
@@ -29,7 +35,7 @@ class Task(models.Model):
         #Assignment due on 2026-02-10
 
     def get_absolute_url(self):
-        return reverse('task_detail', args=[str(self.name)]) #reverse looks for name in path in urlpaths, then returns 1st argument.
+        return reverse('blogpage:task_detail', args=[self.pk]) #reverse looks for name in path in urlpaths, then returns 1st argument.
 
     @property
     def is_due(self):

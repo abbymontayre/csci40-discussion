@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .forms import TaskForm
@@ -28,6 +30,7 @@ def task_list(request):
              "tasks": tasks,
         })
 
+@login_required
 def task_detail(request, id):
     task = Task.objects.get(pk=id)
 
@@ -48,7 +51,7 @@ class TaskListView(ListView):
     model = Task
     template_name = 'blogpage/task_list.html'
 
-class TaskDetailView(DetailView):
+class TaskDetailView(LoginRequiredMixin,DetailView): #LoginMixin is view basis
     model = Task
     template_name = 'blogpage/task_detail.html'
 

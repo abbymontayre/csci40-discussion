@@ -2,7 +2,7 @@
 {% block content %}
     <ul>
         {% for task in task_list %}
-            <li> {{ task.name }} - {{ task.due_date|date:"Y-m-d"}} </li>
+            <li><a href = "{{ task.get_absolute_url }}">{{ task.name }} - {{ task.due_date|date:"Y-m-d"}}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}
