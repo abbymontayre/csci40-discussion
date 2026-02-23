@@ -6,7 +6,7 @@ urlpatterns = [
     path('list', TaskListView.as_view(), name='task_list'),
     path('task/<int:pk>', TaskDetailView.as_view(), name='task_detail'),
     path('add/', TaskAddView.as_view(), name = 'task_add'),
-    path('accounts/', include('django.contrib.auth.urls')),
+
 ]
 
 app_name = "blogpage"
