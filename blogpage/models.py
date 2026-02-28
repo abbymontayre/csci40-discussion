@@ -8,6 +8,9 @@ class Profile(models.Model):
     year_level = models.IntegerField()
     course = models.CharField(max_length=63)
 
+    def __str__(self):
+        return self.user.username
+
 class TaskGroup(models.Model):
     name = models.CharField(max_length=50)
     def __str__(self):
@@ -30,7 +33,7 @@ class Task(models.Model):
         on_delete=models.CASCADE, 
         related_name='students'
     ) #if taskgroup gets deleted, the task mismo gets deleted too
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='task_list')
     def __str__(self):
         return '{}: due on {} unit(s)'.format(self.name, self.due_date)
         #Assignment due on 2026-02-10
