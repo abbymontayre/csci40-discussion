@@ -14,8 +14,9 @@
 </html> -->
 
 <!DOCTYPE html>
+    {% load static %}
     <head>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
         <title>{% block title %}Our blogpage{% endblock %}</title>
         {% block styles %} {% endblock %}
     </head>
@@ -23,7 +24,6 @@
     <body>
             {% if user.is_authenticated %}
                 <h3>Hello {{ user.username }}</h3>
-                {% include 'registration/logout.html' %}
             {% else %}
                 <a href = "{% url 'login.html'}">Login</a>
             {% endif %}

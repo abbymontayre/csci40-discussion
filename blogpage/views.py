@@ -108,4 +108,5 @@ class TaskUpdateView(LoginRequiredMixin, CreateView):
     form_class = TaskForm
     template_name = 'blogpage/task_update.html'
 
-# def task_list(request, id):
+    def post(self, request, *args, **kwargs):
+        pass

@@ -5,7 +5,7 @@ from .models import *
 class TaskForm(forms.Form):
     class Meta:
         model = Task
-        fields = ["name", "due_date", "taskgroup"]
+        fields = ["name", "due_date", "taskgroup", "task_image"]
         widgets = {
             'due_date': forms.TextInput(
                 attrs={'type': 'datetime=local'}

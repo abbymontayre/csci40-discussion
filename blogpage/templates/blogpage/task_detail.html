@@ -1,5 +1,4 @@
 {% extends 'blogpage/base_blogpage.html' %}
-
 {% block title %} Task List | {{ task.name }}{% endblock %}
 {% block header %} <h3> Task List |  {{ task.taskgroup.name}}: {{ task.name }} </h3> {% endblock %}
 
@@ -9,5 +8,9 @@
     <h2>Made by: {{ task.profile.user.username }}, Created {{ task.created_on|date:"Y-m-d" }}, Updated last {{ task.updated_on|date:"Y-m-d" }} </h2>
     <h2>{{ task.name }}</h2>
     <p> Due on {{ task.due_date|date:"Y-m-d"}}</p>
-    <a href="{% url 'blogpage:task_update' pk %}">Update Task</a>
+    <a href="{% url 'blogpage:task_update' pk=task.pk %}">Update Task</a>
+
+    {% if task.task_image %}
+        <img src="{{ task.task_image.url }}" alt="task image"/>
+    {% endif %}
 {% endblock %}
