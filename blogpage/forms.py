@@ -1,5 +1,13 @@
 from django import forms
+from .models import *
+
 
 class TaskForm(forms.Form):
-    task_name = forms.CharField()
-    task_date = forms.DateField()
+    class Meta:
+        model = Task
+        fields = ["name", "due_date", "taskgroup"]
+        widgets = {
+            'due_date': forms.TextInput(
+                attrs={'type': 'datetime=local'}
+            )
+        }

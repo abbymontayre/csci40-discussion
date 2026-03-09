@@ -6,37 +6,52 @@ from .forms import TaskForm
 from django.views.generic.list import *
 from django.views.generic.detail import *
 from django.views.generic import FormView
+from django.views.generic.edit import *
 from .models import *
 
 tasks = []
 
+
 def index(request):
     return HttpResponse('Hello world! This came from the index view.')
 
+
 def task_list(request):
-        
-        if request.method == "POST":
-            form = TaskForm(request.POST)
-            if form.is_valid():
-                tasks.append( (form.cleaned_data['task_name'], form.cleaned_data['task_date']) )
-                return redirect('/blogpage/list')
-        else:
-            form = TaskForm()
+    form = TaskForm()
+    if request.method == "POST":
+        form = TaskForm(request.POST)
 
-        tasks = Task.objects.all()
+    if form.is_valid():
+        task = form.save(commit=False)
+        task.profile = Profile.objects.get(user=request.user)
+        task.save()
 
-        return render(request, "blogpage/task_list.html", {
-             "form": form,
-             "tasks": tasks,
-        })
+        return self.get(request, *args, **kwargs)
+        # task = Task()
+        # task.name = form.cleaned_data.get('task_name')
+        # task.due_date = form.cleaned_data.get('task_date')
+        # task.taskgroup = form.cleaned_data.get('taskgroup')
+
+    else:
+        form = TaskForm()
+
+    tasks = Task.objects.all()
+
+    return render(request, "blogpage/task_list.html", {
+        "form": form,
+        "task_list": tasks,
+        "taskgroups": TaskGroup.objects.all(),
+    })
+
 
 @login_required
 def task_detail(request, id):
     task = Task.objects.get(pk=id)
 
     return render(request, "blogpage/task_detail.html", {
-         "task": task,
-    }) 
+        "task": task,
+    })
+
 
 class TaskAddView(FormView):
     template_name = "blogpage/task_add.html"
@@ -44,12 +59,26 @@ class TaskAddView(FormView):
     success_url = "/blogpage/list"
 
     def form_valid(self, form):
-        tasks.append( (form.cleaned_data['task_name'], form.cleaned_data['task_date']) )
+        tasks.append(
+            (form.cleaned_data['task_name'], form.cleaned_data['task_date']))
         return super().form_valid(form)
+
 
 class TaskListView(ListView):
     model = Task
     template_name = 'blogpage/task_list.html'
+
+    def post(self, request, *args, **kwargs):
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return self.get(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset(**kwargs)
+        context = self.get_context_data(**kwargs)
+        context['form'] = form
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -57,45 +86,26 @@ class TaskListView(ListView):
         context['task_list'] = Task.objects.filter(profile=profile)
         return context
 
-class TaskDetailView(LoginRequiredMixin,DetailView): #LoginMixin is view basis
+
+class TaskDetailView(LoginRequiredMixin, DetailView):  # LoginMixin is view basis
     model = Task
     template_name = 'blogpage/task_detail.html'
 
 
+class TaskCreateView(LoginRequiredMixin, CreateView):
+    model = Task
+    form_class = TaskForm
+    # template_name = task_form.html
+
+    def form_valid(self, form):
+        profile = Profile.objects.get(user=self.request.user)
+        form.instance.profile = profile
+        return super().form_valid(form)
+
+
+class TaskUpdateView(LoginRequiredMixin, CreateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'blogpage/task_update.html'
+
 # def task_list(request, id):
-#     context = {}
-#     if id == 1:
-#         context = {
-#             "tasks": [
-#                 "task 1",
-#                 "task 2",
-#                 "task 3",
-#                 "task 4"
-#             ]
-#         }
-#     else:
-#         context = {
-#             "tasks": [
-#                 "task 5",
-#                 "task 6",
-#                 "task 7",
-#                 "task 8"
-#             ]
-#         }
-#     return render(request, "blogpage/task_list.html", context)
-
-# def task_list(request, name):
-#         context = {
-#             "tasks": [
-#                 "task 1",
-#                 "task 2",
-#                 "task 3",
-#                 "task 4"
-#             ],
-#             "name": name
-#         }
-#         return render(request, "blogpage/task_list.html", context)
-
-
-#views.py is how we display things as a website
-# it can be the template, html, JS, Vue, or anything to disa
