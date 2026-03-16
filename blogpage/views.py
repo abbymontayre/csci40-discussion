@@ -75,11 +75,11 @@ class TaskListView(ListView):
         context['form'] = form
         return self.render_to_response(context)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        profile = Profile.objects.get(user=self.request.user)
-        context['task_list'] = Task.objects.filter(profile=profile)
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     profile = Profile.objects.get(user=self.request.user)
+    #     context['task_list'] = Task.objects.filter(profile=profile)
+    #     return context
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):  # LoginMixin is view basis
