@@ -34,6 +34,7 @@ class Task(models.Model):
     due_date = models.DateTimeField(null=False)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+    task_image = models.ImageField(upload_to='image/', null=True)
     taskgroup = models.ForeignKey(
         TaskGroup,
         on_delete=models.CASCADE,

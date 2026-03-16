@@ -3,24 +3,11 @@
 {% block title %} Add Task {% endblock %}
 {% block header %} Add Task {% endblock %}
 {% block content %}
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        <label for="task_name">
-            <span>Task Name</span>
-            <input type="text" id="task_name" name="task_name">
-        </label>
-        <label for="task_due">
-            <span>Task Due Date</span>
-            <input type="datetime" id="task_due" name="task_due">
-        </label>
-        <select id="taskgroup" name="taskgroup">
-            {% for group in taskgroups %}
-                <option value="{{ group.pk }}">{{ group.name }}</option>
-            {% endfor %}
-        </select>
+        {{ form.as_p }}
         <input type="submit" value="Submit">
     </form>
-
     <ul>
         {% for task in task_list %}
             <li><a href = "{{ task.get_absolute_url }}">{{ task.name }} - {{ task.due_date|date:"Y-m-d" }}</a></li>

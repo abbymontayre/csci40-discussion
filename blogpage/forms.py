@@ -2,7 +2,7 @@ from django import forms
 from .models import *
 
 
-class TaskForm(forms.Form):
+class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ["name", "due_date", "taskgroup", "task_image"]

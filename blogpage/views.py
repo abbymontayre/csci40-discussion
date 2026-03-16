@@ -20,17 +20,12 @@ def task_list(request):
     form = TaskForm()
     if request.method == "POST":
         form = TaskForm(request.POST)
-
-    if form.is_valid():
-        task = form.save(commit=False)
-        task.profile = Profile.objects.get(user=request.user)
-        task.save()
-
-        return self.get(request, *args, **kwargs)
-        # task = Task()
-        # task.name = form.cleaned_data.get('task_name')
-        # task.due_date = form.cleaned_data.get('task_date')
-        # task.taskgroup = form.cleaned_data.get('taskgroup')
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.profile = Profile.objects.get(user=request.user)
+            task.save()
+            print(task)
+            return redirect('blogpage:task_detail', pk=task.pk)
 
     else:
         form = TaskForm()
